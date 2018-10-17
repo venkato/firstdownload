@@ -5,6 +5,7 @@ import net.sf.jremoterun.utilities.JrrClassUtils
 import net.sf.jremoterun.utilities.groovystarter.st.GroovyRunnerConfigurator
 import net.sf.jremoterun.utilities.mdep.DropshipClasspath
 import net.sf.jremoterun.utilities.nonjdk.classpath.refs.GitReferences
+import net.sf.jremoterun.utilities.nonjdk.classpath.refs.GitSomeRefs
 import net.sf.jremoterun.utilities.nonjdk.compile.IfFrameworkCompiler
 import net.sf.jremoterun.utilities.nonjdk.consoleprograms.SetConsoleColoring
 import net.sf.jremoterun.utilities.nonjdk.firstdownload.FirstDownloadSettings2
@@ -62,7 +63,7 @@ class CompileAllFd extends GroovyRunnerConfigurator {
 
     void downloadSshConsole() {
         if (FirstDownloadSettings2.sshConsole == null) {
-            FirstDownloadSettings2.sshConsole = new GitRepoDownloader().cloneGitRepo(GitReferences.sshConsole.repo)
+            FirstDownloadSettings2.sshConsole = new GitRepoDownloader().cloneGitRepo(GitSomeRefs.sshConsole.gitSpec.repo)
             if (FirstDownloadSettings2.updateRepos) {
                 CloneGitRepo.updateGitRepo(FirstDownloadSettings2.sshConsole)
             }

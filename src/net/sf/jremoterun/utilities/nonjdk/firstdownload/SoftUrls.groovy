@@ -1,6 +1,8 @@
 package net.sf.jremoterun.utilities.nonjdk.firstdownload
 
 import groovy.transform.CompileStatic
+import net.sf.jremoterun.utilities.classpath.CustomObjectHandler
+import net.sf.jremoterun.utilities.classpath.MavenDefaultSettings
 import net.sf.jremoterun.utilities.nonjdk.sfdownloader.UrlProvided
 
 @CompileStatic
@@ -39,6 +41,15 @@ enum SoftUrls implements UrlProvided {
     @Override
     URL convertToUrl() {
         return new URL(url)
+    }
+
+    @Override
+    File resolveToFile() {
+        CustomObjectHandler handler = MavenDefaultSettings.mavenDefaultSettings.customObjectHandler
+        if(handler==null){
+            throw new IllegalStateException("customObjectHandler was not set")
+        }
+        return handler.resolveToFile(this)
     }
 }
 

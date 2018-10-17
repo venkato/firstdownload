@@ -59,6 +59,7 @@ class IfFrameworkDownloader extends GroovyRunnerConfigurator {
 
 
     void decideIfNeedUpdateOnStart() {
+
         if (getFirstParam2("${updateRepo} : update repo") == updateRepo) {
             FirstDownloadSettings2.updateRepos = true
             gmrp.args.remove(0)

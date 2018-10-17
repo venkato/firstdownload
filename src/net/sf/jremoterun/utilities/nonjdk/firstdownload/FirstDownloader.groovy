@@ -2,36 +2,17 @@ package net.sf.jremoterun.utilities.nonjdk.firstdownload
 
 import groovy.transform.CompileStatic
 import net.sf.jremoterun.utilities.JrrClassUtils
-import net.sf.jremoterun.utilities.classpath.ClRef
 import net.sf.jremoterun.utilities.classpath.MavenCommonUtils
-import net.sf.jremoterun.utilities.classpath.MavenDefaultSettings
 import net.sf.jremoterun.utilities.groovystarter.GroovyMethodRunnerParams
-import net.sf.jremoterun.utilities.groovystarter.GroovyRunnerConfigurator2
 import net.sf.jremoterun.utilities.nonjdk.GeneralUtils
 import net.sf.jremoterun.utilities.nonjdk.classpath.console.ClasspathStatus
-import net.sf.jremoterun.utilities.nonjdk.classpath.refs.GitReferences
 import net.sf.jremoterun.utilities.nonjdk.classpath.refs.JrrStarterProjects
 import net.sf.jremoterun.utilities.nonjdk.downloadutils.UrlDownloadUtils3
-import net.sf.jremoterun.utilities.nonjdk.downloadutils.WinptyDownloader
 import net.sf.jremoterun.utilities.nonjdk.firstdownload.specclassloader.FirstDownloadSettings
-import net.sf.jremoterun.utilities.nonjdk.vncviewer.VncViewer
-import net.sf.jremoterun.utilities.nonjdk.weirdx.WeirdxDownloader
 import net.sf.jremoterun.utilities.nonjdk.winutils.WinCmdUtils
 import org.apache.commons.lang3.SystemUtils
-import org.junit.Test
 
 import java.util.logging.Logger
-
-import static net.sf.jremoterun.utilities.nonjdk.firstdownload.SoftUrls.conEmuInstaller
-import static net.sf.jremoterun.utilities.nonjdk.firstdownload.SoftUrls.eclipse
-import static net.sf.jremoterun.utilities.nonjdk.firstdownload.SoftUrls.fastStone
-import static net.sf.jremoterun.utilities.nonjdk.firstdownload.SoftUrls.gimp
-import static net.sf.jremoterun.utilities.nonjdk.firstdownload.SoftUrls.idea
-//import static net.sf.jremoterun.utilities.nonjdk.firstdownload.SoftUrls.libreOffice
-import static net.sf.jremoterun.utilities.nonjdk.firstdownload.SoftUrls.libreOfficeRu
-import static net.sf.jremoterun.utilities.nonjdk.firstdownload.SoftUrls.openJdk
-import static net.sf.jremoterun.utilities.nonjdk.firstdownload.SoftUrls.sciteEditor
-import static net.sf.jremoterun.utilities.nonjdk.firstdownload.SoftUrls.totalCmd
 
 @CompileStatic
 class FirstDownloader {

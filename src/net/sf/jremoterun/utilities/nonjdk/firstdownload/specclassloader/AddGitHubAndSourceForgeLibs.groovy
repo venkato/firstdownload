@@ -5,6 +5,7 @@ import net.sf.jremoterun.utilities.JrrClassUtils
 import net.sf.jremoterun.utilities.groovystarter.GroovyRunnerConfigurator2
 import net.sf.jremoterun.utilities.nonjdk.classpath.CutomJarAdd
 import net.sf.jremoterun.utilities.nonjdk.classpath.refs2.CutomJarAdd1
+import net.sf.jremoterun.utilities.nonjdk.compile.JeditTermCompilerConsoleCompiler
 
 import java.util.logging.Logger
 
@@ -17,6 +18,7 @@ class AddGitHubAndSourceForgeLibs extends GroovyRunnerConfigurator2 {
     void doConfig() {
         CutomJarAdd.addCustom adder
         adder.add CutomJarAdd1.downloadIdw()
+        adder.add JeditTermCompilerConsoleCompiler.compileIfNeededS()
     }
 
 }
