@@ -1,10 +1,9 @@
 package net.sf.jremoterun.utilities.nonjdk.firstdownload;
 
 import net.sf.jremoterun.utilities.JrrClassUtils
-import net.sf.jremoterun.utilities.groovystarter.GroovyRunnerConfigurator2
 import net.sf.jremoterun.utilities.groovystarter.st.GroovyRunnerConfigurator
 import net.sf.jremoterun.utilities.nonjdk.ConsoleRedirect
-import net.sf.jremoterun.utilities.nonjdk.firstdownload.specclassloader.FirstDownloadSettings
+import net.sf.jremoterun.utilities.nonjdk.firstdownload.starter.settings.FirstDownloadSettings
 
 import java.util.logging.Logger;
 import groovy.transform.CompileStatic;

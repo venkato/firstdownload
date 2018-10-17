@@ -2,16 +2,14 @@ package net.sf.jremoterun.utilities.nonjdk.firstdownload.specclassloader.sep1
 
 import groovy.transform.CompileStatic
 import net.sf.jremoterun.utilities.JrrClassUtils
-import net.sf.jremoterun.utilities.classpath.AddFilesToUrlClassLoaderGroovy
 import net.sf.jremoterun.utilities.classpath.ClRef
-import net.sf.jremoterun.utilities.groovystarter.GroovyMethodRunnerParams
 import net.sf.jremoterun.utilities.groovystarter.GroovyRunnerConfigurator2
 import net.sf.jremoterun.utilities.groovystarter.runners.RunnableWithParamsFactory
 import net.sf.jremoterun.utilities.nonjdk.firstdownload.FirstDownloadSettings2
-import net.sf.jremoterun.utilities.nonjdk.firstdownload.SelfUpdater
-import net.sf.jremoterun.utilities.nonjdk.firstdownload.specclassloader.CloneGitRepo
-import net.sf.jremoterun.utilities.nonjdk.firstdownload.specclassloader.CloneGitRepo3
-import net.sf.jremoterun.utilities.nonjdk.firstdownload.specclassloader.FirstDownloadSettings
+import net.sf.jremoterun.utilities.nonjdk.firstdownload.starter.SelfUpdater
+import net.sf.jremoterun.utilities.nonjdk.firstdownload.starter.CloneGitRepo
+import net.sf.jremoterun.utilities.nonjdk.firstdownload.starter.CloneGitRepo3
+import net.sf.jremoterun.utilities.nonjdk.firstdownload.starter.settings.FirstDownloadSettings
 
 import java.util.logging.Logger
 
@@ -63,7 +61,7 @@ class DownloadIfFrameworkAndAddToClassPath extends GroovyRunnerConfigurator2 {
         if (cloneGitRepo3 == null) {
             cloneGitRepo3 = new CloneGitRepo3(FirstDownloadSettings.gitRepoDir);
         }
-        return cloneGitRepo3.cloneGitRepo3(FirstDownloadSettings2.ifFrameWorkGitRef)
+        return cloneGitRepo3.cloneGitRepo3(FirstDownloadSettings2.ifFrameWorkGitRef,'main')
     }
 
 }

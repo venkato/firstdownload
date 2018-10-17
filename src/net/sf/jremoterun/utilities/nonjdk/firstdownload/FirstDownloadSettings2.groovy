@@ -3,8 +3,6 @@ package net.sf.jremoterun.utilities.nonjdk.firstdownload;
 import net.sf.jremoterun.utilities.JrrClassUtils
 import net.sf.jremoterun.utilities.classpath.MavenCommonUtils
 import net.sf.jremoterun.utilities.classpath.MavenDefaultSettings
-import net.sf.jremoterun.utilities.groovystarter.GroovyMethodRunnerParams
-import net.sf.jremoterun.utilities.nonjdk.firstdownload.specclassloader.FirstDownloadSettings;
 
 import java.util.logging.Logger;
 import groovy.transform.CompileStatic;
@@ -17,7 +15,7 @@ class FirstDownloadSettings2{
 
 
 
-    public static String ifFrameWorkGitRef = "https://github.com/venkato/InvocationFramework"
+    public static String ifFrameWorkGitRef = "https://github.com/venkato/common"
 
 
     public static File chocoDir = new File(MavenDefaultSettings.mavenDefaultSettings.jrrDownloadDir,"choco")

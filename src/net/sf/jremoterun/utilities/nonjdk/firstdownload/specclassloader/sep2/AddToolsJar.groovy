@@ -5,9 +5,8 @@ import net.sf.jremoterun.utilities.JrrClassUtils
 import net.sf.jremoterun.utilities.classpath.MavenCommonUtils
 import net.sf.jremoterun.utilities.groovystarter.GroovyRunnerConfigurator2
 import net.sf.jremoterun.utilities.nonjdk.classpath.helpers.ClassPathInit3
-import net.sf.jremoterun.utilities.nonjdk.downloadutils.UrlDownloadUtils3
-import net.sf.jremoterun.utilities.nonjdk.firstdownload.SoftUrls
-import net.sf.jremoterun.utilities.nonjdk.firstdownload.specclassloader.FirstDownloadSettings
+import net.sf.jremoterun.utilities.nonjdk.firstdownload.FDZipRefs;
+import net.sf.jremoterun.utilities.nonjdk.firstdownload.starter.settings.FirstDownloadSettings
 
 import java.util.logging.Logger
 
@@ -40,7 +39,7 @@ class AddToolsJar extends GroovyRunnerConfigurator2 {
 
 
     File downloadOpenJdkAndFindToolJar() {
-        File unzip = UrlDownloadUtils3.urlDownloadUtils.downloadUrlAndUnzip(SoftUrls.openJdk);
+        File unzip = FDZipRefs.openJdk.resolveToFile();
         File f = unzip.listFiles()[0]
         File f2 = new File(f, 'lib/tools.jar')
         if (!f2.exists()) {

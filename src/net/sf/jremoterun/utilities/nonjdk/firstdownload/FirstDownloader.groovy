@@ -2,36 +2,17 @@ package net.sf.jremoterun.utilities.nonjdk.firstdownload
 
 import groovy.transform.CompileStatic
 import net.sf.jremoterun.utilities.JrrClassUtils
-import net.sf.jremoterun.utilities.classpath.ClRef
 import net.sf.jremoterun.utilities.classpath.MavenCommonUtils
-import net.sf.jremoterun.utilities.classpath.MavenDefaultSettings
 import net.sf.jremoterun.utilities.groovystarter.GroovyMethodRunnerParams
-import net.sf.jremoterun.utilities.groovystarter.GroovyRunnerConfigurator2
-import net.sf.jremoterun.utilities.nonjdk.GeneralUtils
 import net.sf.jremoterun.utilities.nonjdk.classpath.console.ClasspathStatus
-import net.sf.jremoterun.utilities.nonjdk.classpath.refs.GitReferences
-import net.sf.jremoterun.utilities.nonjdk.classpath.refs.JrrStarterProjects
-import net.sf.jremoterun.utilities.nonjdk.downloadutils.UrlDownloadUtils3
-import net.sf.jremoterun.utilities.nonjdk.downloadutils.WinptyDownloader
-import net.sf.jremoterun.utilities.nonjdk.firstdownload.specclassloader.FirstDownloadSettings
-import net.sf.jremoterun.utilities.nonjdk.vncviewer.VncViewer
-import net.sf.jremoterun.utilities.nonjdk.weirdx.WeirdxDownloader
+import net.sf.jremoterun.utilities.nonjdk.classpath.helpers.UnzipRef
+import net.sf.jremoterun.utilities.nonjdk.classpath.refs.starter.JrrStarterOsSpecificFilesSrc
+import net.sf.jremoterun.utilities.nonjdk.firstdownload.starter.settings.FirstDownloadSettings
+import net.sf.jremoterun.utilities.nonjdk.nativeprocess.NativeProcessResult
 import net.sf.jremoterun.utilities.nonjdk.winutils.WinCmdUtils
 import org.apache.commons.lang3.SystemUtils
-import org.junit.Test
 
 import java.util.logging.Logger
-
-import static net.sf.jremoterun.utilities.nonjdk.firstdownload.SoftUrls.conEmuInstaller
-import static net.sf.jremoterun.utilities.nonjdk.firstdownload.SoftUrls.eclipse
-import static net.sf.jremoterun.utilities.nonjdk.firstdownload.SoftUrls.fastStone
-import static net.sf.jremoterun.utilities.nonjdk.firstdownload.SoftUrls.gimp
-import static net.sf.jremoterun.utilities.nonjdk.firstdownload.SoftUrls.idea
-//import static net.sf.jremoterun.utilities.nonjdk.firstdownload.SoftUrls.libreOffice
-import static net.sf.jremoterun.utilities.nonjdk.firstdownload.SoftUrls.libreOfficeRu
-import static net.sf.jremoterun.utilities.nonjdk.firstdownload.SoftUrls.openJdk
-import static net.sf.jremoterun.utilities.nonjdk.firstdownload.SoftUrls.sciteEditor
-import static net.sf.jremoterun.utilities.nonjdk.firstdownload.SoftUrls.totalCmd
 
 @CompileStatic
 class FirstDownloader {
@@ -61,7 +42,7 @@ class FirstDownloader {
             assert scoopScript.exists()
             String cmd = "powershell -ExecutionPolicy RemoteSigned -File ${scoopScript}"
             log.info "${cmd}"
-            GeneralUtils.runNativeProcess(cmd, null, true)
+            NativeProcessResult.runNativeProcessAndWait cmd
         }
     }
 
@@ -92,7 +73,7 @@ class FirstDownloader {
         ]
         soft = soft.findAll { it.length() > 2 }
         String cmd = "powershell ${scroopScriptFile} install ${soft.join(' ')}"
-        GeneralUtils.runNativeProcess(cmd, null, true)
+        NativeProcessResult.runNativeProcessAndWait cmd
     }
 
 
@@ -101,7 +82,7 @@ class FirstDownloader {
         assert chocoScript.exists()
 
         String cmd = "powershell -NoProfile -ExecutionPolicy Bypass -File ${chocoScript}"
-        GeneralUtils.runNativeProcess(cmd, null, true)
+        NativeProcessResult.runNativeProcessAndWait cmd
     }
 
     void testInstallChocoPackages() {
@@ -133,7 +114,7 @@ class FirstDownloader {
         //String cmd = "choco.exe install ${packages.join(' ')}"
         String cmd = "choco.exe install ${packages.first()}"
         log.info "running : ${cmd}"
-        GeneralUtils.runNativeProcess(cmd, FirstDownloadSettings2.chocoDir, true)
+        NativeProcessResult.runNativeProcessAndWait (cmd, FirstDownloadSettings2.chocoDir)
     }
 
     void testDumpClassPathWise() {
@@ -141,11 +122,12 @@ class FirstDownloader {
     }
 
     void testSetSysInternalsClassPath() {
-        File sysInternals = UrlDownloadUtils3.urlDownloadUtils.downloadUrlAndUnzip(SoftUrls.sysinternals)
+//        File sysInternals = UrlDownloadUtils3.urlDownloadUtils.downloadUrlAndUnzip(SoftUrls.sysinternals)
+        File sysInternals = FDZipRefs.sysinternals.resolveToFile()
         assert sysInternals.exists()
         sysInternals = sysInternals.absoluteFile.canonicalFile
-        File fdDir = JrrStarterProjects.firstdownload.resolveToFile().canonicalFile.absoluteFile
-        GeneralUtils.runNativeProcess "setx JRRCOMMANDSPATH ${sysInternals.absolutePath};${fdDir.absolutePath}"
+        File fdDir = JrrStarterOsSpecificFilesSrc.firstdownload.calcGitRefSrc().resolveToFile().canonicalFile.absoluteFile
+        NativeProcessResult.runNativeProcessAndWait "setx JRRCOMMANDSPATH ${sysInternals.absolutePath};${fdDir.absolutePath}"
         // GeneralUtils.runNativeProcess( "setx PATH ~JRRCOMMANDSPATH~",null,true)
     }
 
@@ -162,7 +144,7 @@ class FirstDownloader {
         }
         String cmd = "cmd /c Ftype ${filetype}=${fileName} %1"
         log.info "cmd  = ${cmd}"
-        GeneralUtils.runNativeProcess cmd
+        NativeProcessResult.runNativeProcessAndWait cmd
     }
 
     void setPlayer() {
@@ -174,16 +156,18 @@ class FirstDownloader {
         all.collect { it.substring(0, it.indexOf('=')).trim() }.each {
             log.info "${it}"
 //             testSetFileAsscisation(it,file)
-            GeneralUtils.runNativeProcess "cmd /c ASSOC ${it}=custvideo"
+            NativeProcessResult.runNativeProcessAndWait "cmd /c ASSOC ${it}=custvideo"
         }
     }
 
 
     void testDownloadConstantWins() {
-        List<String> urls = SoftUrls.values().toList().collect {it.url}
-        urls.findAll { it.length() > 3 }.each {
+        List<SoftUrls> urls = SoftUrls.values().toList()
+//        List<String> urls = SoftUrls.values().toList().collect {it.url}
+        urls.each {
             try {
-                UrlDownloadUtils3.urlDownloadUtils.downloadUrlAndUnzip(new URL(it.trim()))
+                new UnzipRef(it).resolveToFile()
+//                UrlDownloadUtils3.urlDownloadUtils.downloadUrlAndUnzip(new URL(it.trim()))
             } catch (Exception e) {
                 log.warn("failed download ${it}", e)
             }

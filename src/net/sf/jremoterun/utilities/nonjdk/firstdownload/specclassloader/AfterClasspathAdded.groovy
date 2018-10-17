@@ -9,7 +9,7 @@ import net.sf.jremoterun.utilities.groovystarter.st.GroovyRunnerConfigurator
 import net.sf.jremoterun.utilities.nonjdk.consoleprograms.DefaultConsolePrograms
 import net.sf.jremoterun.utilities.nonjdk.downloadutils.LessDownloader
 import net.sf.jremoterun.utilities.nonjdk.firstdownload.FirstDownloadSettings2
-import net.sf.jremoterun.utilities.nonjdk.firstdownload.specclassloader.sep1.IfFrameworkDownloader
+import net.sf.jremoterun.utilities.nonjdk.firstdownload.specclassloader.sep1.ClRefs
 import net.sf.jremoterun.utilities.nonjdk.firstdownload.specclassloader.sep2.AddToolsJar
 import net.sf.jremoterun.utilities.nonjdk.rstacore.RstaLangSupportStatic
 import net.sf.jremoterun.utilities.nonjdk.str2obj.RegisterConverters
@@ -42,7 +42,7 @@ class AfterClasspathAdded extends GroovyRunnerConfigurator {
 
 
     void translateArgs() {
-        m.putAll(DefaultConsolePrograms.defaultShortcuts2)
+        m.putAll((Map)DefaultConsolePrograms.defaultShortcuts2)
         List<String> args = GroovyMethodRunnerParams.gmrp.args
         while (ShortcutSelector.runActionRemoveFirstParam2(m)){
 
@@ -50,15 +50,15 @@ class AfterClasspathAdded extends GroovyRunnerConfigurator {
     }
 
     void doRunSshConsole() {
-        RunnableFactory.runRunner IfFrameworkDownloader.ClRefs.compileAll
+        RunnableFactory.runRunner ClRefs.compileAll
         List<String> args = GroovyMethodRunnerParams.gmrp.args
-        args.add(0,IfFrameworkDownloader.ClRefs.sshConsoleRunner.clRef.className)
+        args.add(0,ClRefs.sshConsoleRunner.clRef.className)
     }
 
     void doRunDefaultClass() {
         List<String> args = GroovyMethodRunnerParams.gmrp.args
-        args.add(0,IfFrameworkDownloader.ClRefs.firstDownloader.clRef.className);
-        RunnableFactory.runRunner IfFrameworkDownloader.ClRefs.methodNotFoundHandler
+        args.add(0, ClRefs.firstDownloader.clRef.className);
+        RunnableFactory.runRunner ClRefs.methodNotFoundHandler
 
     }
 
@@ -82,3 +82,4 @@ goto loop
 
 
 }
+

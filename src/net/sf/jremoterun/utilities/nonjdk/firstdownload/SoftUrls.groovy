@@ -1,6 +1,8 @@
 package net.sf.jremoterun.utilities.nonjdk.firstdownload
 
 import groovy.transform.CompileStatic
+import net.sf.jremoterun.utilities.classpath.CustomObjectHandler
+import net.sf.jremoterun.utilities.classpath.MavenDefaultSettings
 import net.sf.jremoterun.utilities.nonjdk.sfdownloader.UrlProvided
 
 @CompileStatic
@@ -30,15 +32,24 @@ enum SoftUrls implements UrlProvided {
     libreOfficeRu('http://libreoffice-mirror.rbc.ru/pub/libreoffice/libreoffice/stable/6.0.5/win/x86_64/LibreOffice_6.0.5_Win_x64.msi'),
     ;
 
-    String url;
+    URL url;
 
     SoftUrls(String url) {
-        this.url = url
+        this.url = new URL(url)
     }
 
     @Override
     URL convertToUrl() {
-        return new URL(url)
+        return url
+    }
+
+    @Override
+    File resolveToFile() {
+        CustomObjectHandler handler = MavenDefaultSettings.mavenDefaultSettings.customObjectHandler
+        if(handler==null){
+            throw new IllegalStateException("customObjectHandler was not set")
+        }
+        return handler.resolveToFile(this)
     }
 }
 
